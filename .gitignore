@@ -1,0 +1,15 @@
+__pycache__
+
+data/downloaded/*
+!data/downloaded/.gitkeep
+
+data/inputs/*
+!data/inputs/example.edges
+
+data/outputs/*
+!data/outputs/example.edges
+
+data/times/*
+!data/times/example.time
+
+data/graph_sizes.bin
