@@ -50,7 +50,25 @@ Since all the files downloaded don't have the same extensions, the same notation
 
 For instance, [this file](data/inputs/example.edges) represents the following graph:
 
-![Example graph](images/example-graph.png)
+```mermaid
+graph TD;
+    1---2
+    1---3
+    1---5
+    1---6
+    2---3
+    2---4
+    2---5
+    2---6
+    3---5
+    3---6
+    4---7
+    4---8
+    4---9
+    4---10
+    5---6
+    5---7
+```
 
 The Python script that converts the data requires to have installed the following libraries:
 - `networkx` used to build efficiently an undirected graph from the initial file without checking if one edge appears in the two sides in the file or not, and to iterate over each edge in order to write in the output file.
