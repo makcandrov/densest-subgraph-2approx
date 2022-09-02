@@ -35,17 +35,17 @@ This algorithm can be easily implemented with a quadratic complexity, or even wi
 
 ### II-A. Programming languages
 
-The complexity of the 2-approximation algorithm is highly dependent of the data structure used to represend the graph. Thus, we chose to code the core of the algorithm in Java, so that we can have a better management of types and data structures. However, we use Python to plot the results of the running times and to convert the downloaded files into a standardized version.
+The complexity of the 2-approximation algorithm is highly dependent on the data structure used to represent the graph. Thus, we chose to code the core of the algorithm in Java, so that we can have a better management of types and data structures. However, we use Python to plot the results of the running times and to convert the downloaded files into a standardized version.
 
 ### II-B. Network dataset
 
-I order to verify the complexity of our algorithm, we will use the [Stanford Large Network Dataset Collection](http://snap.stanford.edu/data/index.html). As our alrogithm applies on undirected graphs, we will use only their undirected graphs. We stored them in the [data downloaded folder](data/downloaded).
+In order to verify the complexity of our algorithm, we will use the [Stanford Large Network Dataset Collection](http://snap.stanford.edu/data/index.html). As our algorithm applies on undirected graphs, we will use only their undirected graphs. We stored them in the [data downloaded folder](data/downloaded).
 
-Since all the files downloaded don't have the same extensions, the same notations or the same conventions, we convert them, thanks to [this script](data/convertor.py), into another file stored [here](data/inputs) that will repect the following rules:
+Since all the files downloaded don't have the same extensions, the same notations or the same conventions, we convert them, thanks to [this script](data/convertor.py), into another file stored [here](data/inputs) that will respect the following rules:
 
 > - Each file has a `.edges` extension.
 > - Each line of the file represents an edge of the graph.
-> - Each line is composed of two numbers, that reprensents the ends of the edge, separated by a single space. Thus, for *x* and *y* two numbers, the line `x y` indicates that the graph has an edge between *x* and *y*.  
+> - Each line is composed of two numbers, that represents the ends of the edge, separated by a single space. Thus, for *x* and *y* two numbers, the line `x y` indicates that the graph has an edge between *x* and *y*.  
 > - If the line `x y` is in the file, then there is also the line `y x`.
 
 For instance, [this file](data/inputs/example.edges) represents the following graph:
