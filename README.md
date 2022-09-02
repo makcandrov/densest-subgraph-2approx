@@ -223,23 +223,23 @@ Then we iterate over the neighbours of *i*. Let *j* be the *p*<sup>th</sup> neig
 
 The update of the tracker `subNodesTracker` is done in two steps. First, we shall do exactly the same [swap](src/Graph.java#L185) as we did in `subNodes`. Then, the index of *k* in the neighbours of *j* change, so we should update correctly the tracker. This index becomes the old index of *i*, namely `subNodesTracker[i][p]`. The index of *k* in the neighbours of *j* is stored in `subNodesTracker[k][subNodesTracker[j][neighboursCount - 1]]` where `neighboursCount - 1` is the last index of the neighbours of *j* (the old index of *k*). Thus, the [update made to the tracker](src/Graph.java#L183) preserves the properties of the tracker. We also moved *i* in the list of neighbours of *j*, then we should also update the tracker to update the index of *i* in the neighbours of *j*. But *i* will not appear in the next iterations because it is removed from the graph. So we do not perform this unnecessary operation.
 
-Since we remove a neighbour to *j*, its degree changes. In fact it decreases by one. In the same way, we [remove](src/Graph.java#L198) *j* from the nodes of degre *d* where *d* is the former degree of *j* right after [swapping](src/Graph.java#L196) *j* with *k* the last node of degree *d* in `degreeToNodes[d]` to ensure an operation in *O(1)*. We also [update](src/Graph.java#L195) the tracker and we [modify](src/Graph.java#L200) `subDegrees` that stores the degree of each node.
+Since we remove a neighbour to *j*, its degree changes. In fact it decreases by one. In the same way, we [remove](src/Graph.java#L198) *j* from the nodes of degree *d* where *d* is the former degree of *j* right after [swapping](src/Graph.java#L196) *j* with *k* the last node of degree *d* in `degreeToNodes[d]` to ensure an operation in *O(1)*. We also [update](src/Graph.java#L195) the tracker, and we [modify](src/Graph.java#L200) `subDegrees` that stores the degree of each node.
 
 We don't forget to update [*n*](src/Graph.java#L176) and [*m*](src/Graph.java#L188) correctly. We do it in *O(1)* because we know each time we remove a node or an edge, so it costs only one elementary operation for each node and edge. With these values of *n* and *m*, we can compute in *O(1)* the density of the new graph.
 
-This algorithm iterates over each edge and node simultaneously, and performs operations in *O(1)* at each interation. That ensures a linear complexity. We will take apart the coputation of the complexity of the update of `minDegree` that stores the minimal degree of the graph, and the creation of the subgraph from the indexes of the subgraph.
+This algorithm iterates over each edge and node simultaneously, and performs operations in *O(1)* at each interaction. That ensures a linear complexity. We will take apart the computation of the complexity of the update of `minDegree` that stores the minimal degree of the graph and the creation of the subgraph from the indexes of the subgraph.
 
-#### III-B.5. Finding the minimal degree
+#### III-B.6. Finding the minimal degree
 
 At each step, [we remove a node of minimal degree](src/Graph.java#L174). The value of the minimal degree is stored in `minDegree` and it is updated when needed. If it is not done carefully, this update can lead to a program that is not with a linear complexity.
 
 First of all, we [initialize](src/Graph.java#L162) `minDegree` at the same time as we initialize the differents arrays. So, it does not affect the complexity.
 
-At each iteration, we remove at most one edge by node, except for the node we remove. Thus, the minimal degree can only degrease at most by one. However it can increases as much as possible, but can not exceed *|V<sub>G</sub>|* the number of nodes in the initial graph.
+At each iteration, we remove at most one edge by node, except for the node we remove. Thus, the minimal degree can only degrease at most by one. However, it can increases as much as possible, but can not exceed *|V<sub>G</sub>|* the number of nodes in the initial graph.
 
 In order to find the new value of `minDegree`, we first [decrease](src/Graph.java#L206) `minDegree` by one, and then [increase](src/Graph.java#L208) `minDegree` by one while there is no node of degree `minDegree`. Since the minimal degree can only decrease by one at each iteration and it is bounded by *0* and *|V<sub>G</sub>|*, during the whole algorithm, `minDegree` will not by increased by one more than *2|V<sub>G</sub>|* times. Thus, finding the minimal degree does not impact the linear complexity of the algorithm.
 
-#### III-B.6. Building the induced subgraph
+#### III-B.7. Building the induced subgraph
 
 So far, we have build a list of nodes that represents the node of the 2-approximation densest subgraph. Then, we have to build the induced subgrpaph. This operation is done [here](src/Graph.java#L77), in the method `subgraph` of the class `Graph`.
 
