@@ -1,7 +1,7 @@
 ### MITRO209 Project
 # Densest subgraph 2-approximation algorithm implemented with a linear temporal complexity
 
-This projects aims to implement the 2-approximation algorithm for the densest subgraph problem such that it runs in a linear time.
+This project aims to implement the 2-approximation algorithm for the densest subgraph problem so that it runs in a linear time.
 
 ## I - Densest subgraph problem and 2-approximation algorithm definitions
 
@@ -35,7 +35,7 @@ This algorithm can be easily implemented with a quadratic complexity, or even wi
 
 ### II-A. Programming languages
 
-The complexity of the 2-approximation algorithm is highly dependent of the data structure used to represend the graph. Thus, we chose to code the core of the algorithm in Java, so that we can have a better management of types and data structures. However, we are using Python to plot the results of the running times and to convert the downloaded files into a standardized version.
+The complexity of the 2-approximation algorithm is highly dependent of the data structure used to represend the graph. Thus, we chose to code the core of the algorithm in Java, so that we can have a better management of types and data structures. However, we use Python to plot the results of the running times and to convert the downloaded files into a standardized version.
 
 ### II-B. Network dataset
 
