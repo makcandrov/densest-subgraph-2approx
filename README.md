@@ -123,12 +123,12 @@ We will also stick to the following conventions:
 
 The core algorithm can be found [here](src/Graph.java#L122) in the method `approxDensestSubgraph`. Before even starting the loop, we are making some preliminary statements that will help us during the loop. In this section, *G* will refer to the first graph, *G<sub>q</sub>* to the graph obtained at the *q*<sup>th</sup> iteration, *H<sub>q</sub>* to the graph with the maximum density within *G<sub>0</sub>*, ..., *G<sub>q</sub>*, and H to the graph returned by the algorithm, *i.e.* *H = H<sub>n</sub>*.
 
-First of all, we intialize [two integers](src/Graph.java#L127), `n` and `m` that will always verify, at the end of the *q*<sup>th</sup> iteration:
+First of all, we initialize [two integers](src/Graph.java#L127), `n` and `m` that will always verify, at the end of the *q*<sup>th</sup> iteration:
 
 > `n` = *|V<sub>G<sub>q</sub></sub>|*  
 > `m` = *|E<sub>G<sub>q</sub></sub>|*  
 
- Right after, we intialize [all the arrays](src/Graph.java#L130) we will use, that we will describe later. This initialization is done is *O(|V<sub>G</sub>|)*. At the same time, [we fill the array of degrees](src/Graph.java#L139) `subDegrees` such that the *i*<sup>th</sup> element is equal to *&delta;<sub>G</sub>(v)* where `v = nodes.get(i)`.
+ Right after, we initialize [all the arrays](src/Graph.java#L130) we will use, that we will describe later. This initialization is done is *O(|V<sub>G</sub>|)*. At the same time, [we fill the array of degrees](src/Graph.java#L139) `subDegrees` such that the *i*<sup>th</sup> element is equal to *&delta;<sub>G</sub>(v)* where `v = nodes.get(i)`.
 
 In order to simplify the operations, our algorithm works only with integers. Then we first convert the adjacency list `nodes` of type `ArrayList<Node>` to a real adjacency list `subNodes` of type `ArrayList<ArrayList<Integer>>` in which the index *i* refers to the node *v* that satisfies `v.id == i`, *i.e.* to the *i*<sup>th</sup> node of `nodes`. [This transformation](src/Graph.java#L147) is done in *O(|V<sub>G</sub>| + |E<sub>G</sub>|)* because we iterate over each edge.
 
