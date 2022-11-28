@@ -2,6 +2,7 @@ import networkx as nx
 import os
 import pickle
 
+
 def convert(path, fileName, extension='.txt', separator=' ', start=0):
     G = nx.Graph()
     with open("data/downloaded/" + path + fileName + extension, 'r') as fromFile:
@@ -27,7 +28,7 @@ def convert(path, fileName, extension='.txt', separator=' ', start=0):
 
     with open("data/graph_sizes.bin", "wb") as graphSizesFile:
         pickle.dump(graph_sizes, graphSizesFile)
-        
+
 
 # convert("com-amazon/", "com-amazon.ungraph", ".txt", '	', 4)
 

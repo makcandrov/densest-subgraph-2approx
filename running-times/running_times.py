@@ -5,6 +5,7 @@ import os
 import pickle
 from sklearn.linear_model import LinearRegression
 
+
 def createGraph(path):
     G = nx.Graph()
     with open(path) as file:
@@ -15,13 +16,14 @@ def createGraph(path):
             line = file.readline()
     return G
 
+
 def plotRunningTimes():
     files = [x[:-5] for x in os.listdir("data/times/")]
     if os.path.isfile("data/graph_sizes.bin"):
         with open("data/graph_sizes.bin", "rb") as graphSizesFile:
             graph_sizes = pickle.load(graphSizesFile)
     else:
-       graph_sizes = {} 
+       graph_sizes = {}
 
     sizes = []
     times = []
@@ -54,7 +56,7 @@ def plotRunningTimes():
     a = model.coef_
     b = model.intercept_
     print(a)
-    
+
     plt.title("Algorithm running time in function of the size of the graph")
     plt.xlabel('Size of the graph (number of nodes + number of edges)')
     plt.ylabel('Computation time (ns)')

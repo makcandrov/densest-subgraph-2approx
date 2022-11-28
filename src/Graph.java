@@ -13,12 +13,12 @@ public class Graph {
     private Integer nbEdges = null;
 
     public Graph(String filePath) {
-        try(BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             HashMap<String, Integer> nameToId = new HashMap<>();
             String line = null;
             while ((line = br.readLine()) != null) {
                 String[] edgeNames = line.split(" ");
-                Node[] edgeNodes = {null, null};
+                Node[] edgeNodes = { null, null };
                 for (int x = 0; x <= 1; x++) {
                     int nodeIndex;
                     if (nameToId.containsKey(edgeNames[x])) {
@@ -30,13 +30,13 @@ public class Graph {
                     }
                     edgeNodes[x] = this.nodes.get(nodeIndex);
                 }
-                
+
                 edgeNodes[0].neighbours.add(edgeNodes[1]);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }  
+    }
 
     public Graph(ArrayList<Node> nodes) {
         this.nodes = nodes;
@@ -68,16 +68,18 @@ public class Graph {
 
     /**
      * Returns the density of the graph (Number of nodes divided by number of edges)
+     * 
      * @return The density
      */
     public float getDensity() {
-        return (float)getNbNodes() / (float)getNbEdges();
+        return (float) getNbNodes() / (float) getNbEdges();
     }
 
     /**
      * Creates an induced subgraph of the current graph
+     * 
      * @param nodesToKeep Nodes from the graph to keep in the subgraph
-     * @return The induced subgraph 
+     * @return The induced subgraph
      */
     public Graph subgraph(ArrayList<Node> nodesToKeep) {
         int NOT_IN_THE_GRAPH = -2;
@@ -86,7 +88,7 @@ public class Graph {
         ArrayList<Node> subgraphNodes = new ArrayList<>();
         ArrayList<Integer> subgraphIds = new ArrayList<>();
 
-        for (int i = 0; i < getNbNodes(); i++){
+        for (int i = 0; i < getNbNodes(); i++) {
             subgraphIds.add(NOT_IN_THE_GRAPH);
         }
         for (int i = 0; i < nodesToKeep.size(); i++) {
@@ -106,7 +108,7 @@ public class Graph {
                         subgraphIds.set(v.id, subgraphNodes.size());
                         subgraphNodes.add(new Node(subgraphNodes.size(), v.name));
                     }
-                    if(subgraphIds.get(v.id) != NOT_IN_THE_GRAPH) {
+                    if (subgraphIds.get(v.id) != NOT_IN_THE_GRAPH) {
                         int si = subgraphIds.get(u.id);
                         int sj = subgraphIds.get(v.id);
                         Node su = subgraphNodes.get(si);
@@ -121,6 +123,7 @@ public class Graph {
 
     /**
      * Computes a 2-approximation densest subgraph with a linear complexity
+     * 
      * @return A 2-apporximation densest subgraph
      */
     public Graph approxDensestSubgraph() {
@@ -159,7 +162,9 @@ public class Graph {
             }
 
             int d = subDegrees.get(i);
-            if (d < minDegree) minDegree = d;
+            if (d < minDegree) {
+                minDegree = d;
+            }
 
             degreeToNodesTracker.add(degreeToNodes.get(d).size());
             degreeToNodes.get(d).add(i);
@@ -174,7 +179,7 @@ public class Graph {
             int i = nodesOfMinDegree.remove(nodesOfMinDegree.size() - 1);
             removed.add(i);
             n--;
-            for (int p = 0; p < subNodes.get(i).size(); p++){
+            for (int p = 0; p < subNodes.get(i).size(); p++) {
                 int j = subNodes.get(i).get(p);
                 int neighboursCount = subNodes.get(j).size();
 
@@ -189,7 +194,7 @@ public class Graph {
 
                 int d = subDegrees.get(j);
                 int nodesWithSameDegreeCount = degreeToNodes.get(d).size();
-                
+
                 if (degreeToNodesTracker.get(j) != nodesWithSameDegreeCount - 1) {
                     int k = degreeToNodes.get(d).get(nodesWithSameDegreeCount - 1);
                     degreeToNodesTracker.set(k, degreeToNodesTracker.get(j));
@@ -203,13 +208,15 @@ public class Graph {
             }
 
             subDegrees.set(i, null);
-            if (minDegree > 0) minDegree--;
+            if (minDegree > 0) {
+                minDegree--;
+            }
             while (degreeToNodes.get(minDegree).size() == 0 && n > 0) {
                 minDegree++;
             }
 
             if (m > 0) {
-                float currentDensity = (float)m / (float)n;
+                float currentDensity = (float) m / (float) n;
 
                 if (currentDensity > maxDensity) {
                     maxDensity = currentDensity;
@@ -219,7 +226,7 @@ public class Graph {
         }
 
         ArrayList<Node> nodesToKeep = new ArrayList<>();
-        for (int i = selectedIteration; i < getNbNodes(); i++){
+        for (int i = selectedIteration; i < getNbNodes(); i++) {
             nodesToKeep.add(this.nodes.get(removed.get(i)));
         }
 
@@ -228,6 +235,7 @@ public class Graph {
 
     /**
      * Exports the graph as a .edges file.
+     * 
      * @param path Path to the file into which the graph is exported.s
      */
     public void export(String path) {
@@ -244,8 +252,11 @@ public class Graph {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            try {writer.close();} catch (IOException e) {e.printStackTrace();}
+            try {
+                writer.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
- 
 }

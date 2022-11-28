@@ -121,18 +121,18 @@ We will also stick to the following conventions:
 
 #### III-B.2. Preliminary statements
 
-The core algorithm can be found [here](src/Graph.java#L122) in the method `approxDensestSubgraph`. Before even starting the loop, we are making some preliminary statements that will help us during the loop. In this section, *G* will refer to the first graph, *G<sub>q</sub>* to the graph obtained at the *q*<sup>th</sup> iteration, *H<sub>q</sub>* to the graph with the maximum density within *G<sub>0</sub>*, ..., *G<sub>q</sub>*, and H to the graph returned by the algorithm, *i.e.* *H = H<sub>n</sub>*.
+The core algorithm can be found [here](src/Graph.java#L129) in the method `approxDensestSubgraph`. Before even starting the loop, we are making some preliminary statements that will help us during the loop. In this section, *G* will refer to the first graph, *G<sub>q</sub>* to the graph obtained at the *q*<sup>th</sup> iteration, *H<sub>q</sub>* to the graph with the maximum density within *G<sub>0</sub>*, ..., *G<sub>q</sub>*, and H to the graph returned by the algorithm, *i.e.* *H = H<sub>n</sub>*.
 
-First of all, we initialize [two integers](src/Graph.java#L127), `n` and `m` that will always verify, at the end of the *q*<sup>th</sup> iteration:
+First of all, we initialize [two integers](src/Graph.java#L130), `n` and `m` that will always verify, at the end of the *q*<sup>th</sup> iteration:
 
 > `n` = *|V<sub>G<sub>q</sub></sub>|*  
 > `m` = *|E<sub>G<sub>q</sub></sub>|*  
 
- Right after, we initialize [all the arrays](src/Graph.java#L130) we will use, that we will describe later. This initialization is done is *O(|V<sub>G</sub>|)*. At the same time, [we fill the array of degrees](src/Graph.java#L139) `subDegrees` such that the *i*<sup>th</sup> element is equal to *&delta;<sub>G</sub>(v)* where `v = nodes.get(i)`.
+ Right after, we initialize [all the arrays](src/Graph.java#L133) we will use, that we will describe later. This initialization is done is *O(|V<sub>G</sub>|)*. At the same time, [we fill the array of degrees](src/Graph.java#L142) `subDegrees` such that the *i*<sup>th</sup> element is equal to *&delta;<sub>G</sub>(v)* where `v = nodes.get(i)`.
 
-In order to simplify the operations, our algorithm works only with integers. Then we first convert the adjacency list `nodes` of type `ArrayList<Node>` to a real adjacency list `subNodes` of type `ArrayList<ArrayList<Integer>>` in which the index *i* refers to the node *v* that satisfies `v.id == i`, *i.e.* to the *i*<sup>th</sup> node of `nodes`. [This transformation](src/Graph.java#L147) is done in *O(|V<sub>G</sub>| + |E<sub>G</sub>|)* because we iterate over each edge.
+In order to simplify the operations, our algorithm works only with integers. Then we first convert the adjacency list `nodes` of type `ArrayList<Node>` to a real adjacency list `subNodes` of type `ArrayList<ArrayList<Integer>>` in which the index *i* refers to the node *v* that satisfies `v.id == i`, *i.e.* to the *i*<sup>th</sup> node of `nodes`. [This transformation](src/Graph.java#L150) is done in *O(|V<sub>G</sub>| + |E<sub>G</sub>|)* because we iterate over each edge.
 
-At the same time, we [fill a new array](src/Graph.java#L165), `degreeToNodes` that will link a degree *d* to all the nodes of degree *d*. Thus, `degreeToNodes.get(d)` is the list of nodes of degree *d*. This array gives us a kind of order by degree between nodes, and it will be used to find a node of minimum degree.
+At the same time, we [fill a new array](src/Graph.java#L170), `degreeToNodes` that will link a degree *d* to all the nodes of degree *d*. Thus, `degreeToNodes.get(d)` is the list of nodes of degree *d*. This array gives us a kind of order by degree between nodes, and it will be used to find a node of minimum degree.
 
 So far, we defined `subNodes`, `subDegrees` and `degreeToNodes` that must verify, at the end of the *q*<sup>th</sup> iteration:
 
@@ -207,45 +207,45 @@ Thus, the following assertion is always true at the end of the *q*<sup>th</sup> 
 
 #### III-B.5. Inside the loop
 
-The [main loop](src/Graph.java#L172) implements the only loop of the 2-approximation densest subgraph algorithm described in pseudo-code in the [first part](#i---densest-subgraph-problem-and-2-approximation-algorithm-definitions) with the tricks described in [III-B.3.](#iii-b3-removing-a-node) and [III-B.4.](#iii-b4-introduction-of-trackers) in order to ensure a linear complexity.
+The [main loop](src/Graph.java#L177) implements the only loop of the 2-approximation densest subgraph algorithm described in pseudo-code in the [first part](#i---densest-subgraph-problem-and-2-approximation-algorithm-definitions) with the tricks described in [III-B.3.](#iii-b3-removing-a-node) and [III-B.4.](#iii-b4-introduction-of-trackers) in order to ensure a linear complexity.
 
-Since we can not remove an element from `subNodes` without making too costly operations, this loop will never remove any element from `subNodes`. It will instead build an `ArrayList<Integer>` named `removed` that stores the node removed at each iteration. More precisely, `removed.get(q)` is the node removed at the *q*<sup>th</sup> iteration. This loop will also [update when needed](src/Graph.java#L216) the integer `selectedIteration` that verifies at the end of the *q*<sup>th</sup> iteration the following assertion:
+Since we can not remove an element from `subNodes` without making too costly operations, this loop will never remove any element from `subNodes`. It will instead build an `ArrayList<Integer>` named `removed` that stores the node removed at each iteration. More precisely, `removed.get(q)` is the node removed at the *q*<sup>th</sup> iteration. This loop will also [update when needed](src/Graph.java#L223) the integer `selectedIteration` that verifies at the end of the *q*<sup>th</sup> iteration the following assertion:
 
 > *H<sub>q</sub> = G*<sub>`selectedIteration`</sub>
 
-With these two objects, we can restore the nodes of *H* after the loop thanks to [an operation with a linear complexity](src/Graph.java#L222), and then build the subgraph *H*.
+With these two objects, we can restore the nodes of *H* after the loop thanks to [an operation with a linear complexity](src/Graph.java#L229), and then build the subgraph *H*.
 
 Let's dive into the loop.
 
-First, we [remove a node of minimal degree](src/Graph.java#L174) from `degreeToNodes`. The node removed, named *i*, is always the last one, such that this operation is done in *O(1)*. We [make sure to add this node](src/Graph.java#L175) to `removed`.
+First, we [remove a node of minimal degree](src/Graph.java#L179) from `degreeToNodes`. The node removed, named *i*, is always the last one, such that this operation is done in *O(1)*. We [make sure to add this node](src/Graph.java#L180) to `removed`.
 
-Then we iterate over the neighbours of *i*. Let *j* be the *p*<sup>th</sup> neighbour of *i*. We must remove *i* from the neighbours of *j*. To do that, we [swap](src/Graph.java#L184) *i* with the last neighbour of *j*, which we name *k*, in the list of neighbours of *j* `subNodes[j]`. We can perform that swap because the index of *i* is stored in the tracker `subNodesTracker`. Indeed, this index is `subNodesTracker[i][p]` .We take care to update correctly the tracker `subNodesTracker` and then we [remove](src/Graph.java#L187) *i*, this operation is done in *O(1)* because *i* is now the last element of `subNodes.get[j]`.
+Then we iterate over the neighbours of *i*. Let *j* be the *p*<sup>th</sup> neighbour of *i*. We must remove *i* from the neighbours of *j*. To do that, we [swap](src/Graph.java#L189) *i* with the last neighbour of *j*, which we name *k*, in the list of neighbours of *j* `subNodes[j]`. We can perform that swap because the index of *i* is stored in the tracker `subNodesTracker`. Indeed, this index is `subNodesTracker[i][p]` .We take care to update correctly the tracker `subNodesTracker` and then we [remove](src/Graph.java#L192) *i*, this operation is done in *O(1)* because *i* is now the last element of `subNodes.get[j]`.
 
-The update of the tracker `subNodesTracker` is done in two steps. First, we shall do exactly the same [swap](src/Graph.java#L185) as we did in `subNodes`. Then, the index of *k* in the neighbours of *j* change, so we should update correctly the tracker. This index becomes the old index of *i*, namely `subNodesTracker[i][p]`. The index of *k* in the neighbours of *j* is stored in `subNodesTracker[k][subNodesTracker[j][neighboursCount - 1]]` where `neighboursCount - 1` is the last index of the neighbours of *j* (the old index of *k*). Thus, the [update made to the tracker](src/Graph.java#L183) preserves the properties of the tracker. We also moved *i* in the list of neighbours of *j*, then we should also update the tracker to update the index of *i* in the neighbours of *j*. But *i* will not appear in the next iterations because it is removed from the graph. So we do not perform this unnecessary operation.
+The update of the tracker `subNodesTracker` is done in two steps. First, we shall do exactly the same [swap](src/Graph.java#L190) as we did in `subNodes`. Then, the index of *k* in the neighbours of *j* change, so we should update correctly the tracker. This index becomes the old index of *i*, namely `subNodesTracker[i][p]`. The index of *k* in the neighbours of *j* is stored in `subNodesTracker[k][subNodesTracker[j][neighboursCount - 1]]` where `neighboursCount - 1` is the last index of the neighbours of *j* (the old index of *k*). Thus, the [update made to the tracker](src/Graph.java#L188) preserves the properties of the tracker. We also moved *i* in the list of neighbours of *j*, then we should also update the tracker to update the index of *i* in the neighbours of *j*. But *i* will not appear in the next iterations because it is removed from the graph. So we do not perform this unnecessary operation.
 
-Since we remove a neighbour to *j*, its degree changes. In fact it decreases by one. In the same way, we [remove](src/Graph.java#L198) *j* from the nodes of degree *d* where *d* is the former degree of *j* right after [swapping](src/Graph.java#L196) *j* with *k* the last node of degree *d* in `degreeToNodes[d]` to ensure an operation in *O(1)*. We also [update](src/Graph.java#L195) the tracker, and we [modify](src/Graph.java#L200) `subDegrees` that stores the degree of each node.
+Since we remove a neighbour to *j*, its degree changes. In fact it decreases by one. In the same way, we [remove](src/Graph.java#L203) *j* from the nodes of degree *d* where *d* is the former degree of *j* right after [swapping](src/Graph.java#L201) *j* with *k* the last node of degree *d* in `degreeToNodes[d]` to ensure an operation in *O(1)*. We also [update](src/Graph.java#L200) the tracker, and we [modify](src/Graph.java#L205) `subDegrees` that stores the degree of each node.
 
-We don't forget to update [*n*](src/Graph.java#L176) and [*m*](src/Graph.java#L188) correctly. We do it in *O(1)* because we know each time we remove a node or an edge, so it costs only one elementary operation for each node and edge. With these values of *n* and *m*, we can compute in *O(1)* the density of the new graph.
+We don't forget to update [*n*](src/Graph.java#L181) and [*m*](src/Graph.java#L193) correctly. We do it in *O(1)* because we know each time we remove a node or an edge, so it costs only one elementary operation for each node and edge. With these values of *n* and *m*, we can compute in *O(1)* the density of the new graph.
 
 This algorithm iterates over each edge and node simultaneously, and performs operations in *O(1)* at each interaction. That ensures a linear complexity. We will take apart the computation of the complexity of the update of `minDegree` that stores the minimal degree of the graph and the creation of the subgraph from the indexes of the subgraph.
 
 #### III-B.6. Finding the minimal degree
 
-At each step, [we remove a node of minimal degree](src/Graph.java#L174). The value of the minimal degree is stored in `minDegree` and it is updated when needed. If it is not done carefully, this update can lead to a program that is not with a linear complexity.
+At each step, [we remove a node of minimal degree](src/Graph.java#L179). The value of the minimal degree is stored in `minDegree` and it is updated when needed. If it is not done carefully, this update can lead to a program that is not with a linear complexity.
 
-First of all, we [initialize](src/Graph.java#L162) `minDegree` at the same time as we initialize the differents arrays. So, it does not affect the complexity.
+First of all, we [initialize](src/Graph.java#L166) `minDegree` at the same time as we initialize the differents arrays. So, it does not affect the complexity.
 
 At each iteration, we remove at most one edge by node, except for the node we remove. Thus, the minimal degree can only degrease at most by one. However, it can increases as much as possible, but can not exceed *|V<sub>G</sub>|* the number of nodes in the initial graph.
 
-In order to find the new value of `minDegree`, we first [decrease](src/Graph.java#L206) `minDegree` by one, and then [increase](src/Graph.java#L208) `minDegree` by one while there is no node of degree `minDegree`. Since the minimal degree can only decrease by one at each iteration and it is bounded by *0* and *|V<sub>G</sub>|*, during the whole algorithm, `minDegree` will not by increased by one more than *2|V<sub>G</sub>|* times. Thus, finding the minimal degree does not impact the linear complexity of the algorithm.
+In order to find the new value of `minDegree`, we first [decrease](src/Graph.java#L212) `minDegree` by one, and then [increase](src/Graph.java#L215) `minDegree` by one while there is no node of degree `minDegree`. Since the minimal degree can only decrease by one at each iteration and it is bounded by *0* and *|V<sub>G</sub>|*, during the whole algorithm, `minDegree` will not by increased by one more than *2|V<sub>G</sub>|* times. Thus, finding the minimal degree does not impact the linear complexity of the algorithm.
 
 #### III-B.7. Building the induced subgraph
 
-So far, we have build a list of nodes that represents the node of the 2-approximation densest subgraph. Then, we have to build the induced subgrpaph. This operation is done [here](src/Graph.java#L77), in the method `subgraph` of the class `Graph`.
+So far, we have build a list of nodes that represents the node of the 2-approximation densest subgraph. Then, we have to build the induced subgrpaph. This operation is done [here](src/Graph.java#L84), in the method `subgraph` of the class `Graph`.
 
 In order tu build the induced subgraph, we use a list named `subgraphIds` that stores the index *si* of a node *u* of index *i* from the parent graph in `subgraphIds.get(i)`. By iterating over each node, we first initialize each value to `NOT_YET_ADDED` or `NOT_IN_THE_GRAPH`, two special values, wether the node at the corresponding index should be in the subgraph or not. This operation is done in *O(|V<sub>G</sub>|)*.
 
-Then, we iterate over each edge of the initial graph, and add the edge to the subgraph if and only if the two ends of the edge should be in the subgraph. Inside the loop, this operation is done in *O(1)*, because thanks to `subgraphIds`, we can know in constant time wether the current node should be in the subgraph or not. Also, when we add a node *u* to the subgraph by [adding it to the subgraph adjacency list](src/Graph.java#L101) `subgraphNodes`, we also [update](src/Graph.java#L100) `subgraphIds` such that `subgraphIds.get(u.id)` refers to its index in the subgraph ajdacency list. Thus, this node can be [found](src/Graph.java#L110) when needed in constant time.
+Then, we iterate over each edge of the initial graph, and add the edge to the subgraph if and only if the two ends of the edge should be in the subgraph. Inside the loop, this operation is done in *O(1)*, because thanks to `subgraphIds`, we can know in constant time wether the current node should be in the subgraph or not. Also, when we add a node *u* to the subgraph by [adding it to the subgraph adjacency list](src/Graph.java#L103) `subgraphNodes`, we also [update](src/Graph.java#L102) `subgraphIds` such that `subgraphIds.get(u.id)` refers to its index in the subgraph ajdacency list. Thus, this node can be [found](src/Graph.java#L112) when needed in constant time.
 
 Finally, from the initial graph, it has been proven that the algorithm builds a 2-approximation densest subgraph with a linear complexity.
 
@@ -253,7 +253,7 @@ Finally, from the initial graph, it has been proven that the algorithm builds a 
 
 ## IV-A. Running time computation
 
-To compute the running time, we compute the time elapsed during the [execution of the 2-approximation densest algorithm](src/Main.java#L45), *i.e.* during the execution of the method `approxDensestSubgraph` of the class `Graph`.
+To compute the running time, we compute the time elapsed during the [execution of the 2-approximation densest algorithm](src/Main.java#L49), *i.e.* during the execution of the method `approxDensestSubgraph` of the class `Graph`.
 
 
 The function `runAllFilesInRandomOrder` from the file `Main.java` allows us to compute the running time of all the files in th folder [data/inputs](data/inputs) (see [an example of input](data/inputs/example.edges)). This function writes the subgraph found in the folder [data/outputs](data/outputs) with exactly the same name as the file in [data/inputs](data/inputs), and this output file respects the conventions described in [this](#ii-b-network-dataset) part (see [an example of output](data/outputs/example.edges)). The function also appends the running time of the algorithm in the folder [data/times](data/times) in a file with the same name as in [data/inputs](data/inputs) but with a `.time` extension (see [an example of running time file](data/times/example.time)). You can escape some files if your machine doesn't have enough memory to execute them by [adding](src/Main.java#L14) them to the list `filesTooLarge`.
